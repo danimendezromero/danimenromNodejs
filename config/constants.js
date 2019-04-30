@@ -16,8 +16,14 @@ module.exports = {
     },
     serviceStatus: {
         USER_CREATED_SUCCESSFULLY: 'User created successfully',
+        USER_LIST_FETCHED_SUCCESSFULLY: 'User list fetched successfully',
+        USER_FETCHED_SUCCESSFULLY: 'User Fetched Successfully',
         MEDIA_CREATED_SUCCESSFULLY: 'Media created successfully',
-        CAPITOLS_CREATED_SUCCESSFULLY: 'Capitols created successfully'
+        MEDIA_LIST_FETCHED_SUCCESSFULLY: 'Media list fetched successfully',
+        MEDIA_FETCHED_SUCCESSFULLY: 'Media Fetched Successfully',
+        CAPITOLS_CREATED_SUCCESSFULLY: 'Capitols created successfully',
+        CAPITOLS_LIST_FETCHED_SUCCESSFULLY: 'Capitols list fetched successfully',
+        CAPITOLS_FETCHED_SUCCESSFULLY: 'Capitols Fetched Successfully'
     },
     requestObj: {
         BODY: 'body',

@@ -3,7 +3,14 @@ const Capitols = require('../models/db/capitolsModel');
 const crudRepository = require('../database/crudRespository');
 const mongoose = require('mongoose');
 
-
+module.exports.createConnection = async () => {
+    try{
+        const responseFromDatabase = await crudRepository.createConnection();
+        console.log("responseObj", responseFromDatabase);
+    }catch(err) {
+        console.log('ERROR-Service-createConnection: ', err);
+    }
+};
 
 module.exports.createCapitols = async (serviceData) => {
     const responseObj = constants.responseObj;
