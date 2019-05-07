@@ -64,3 +64,50 @@ module.exports.find = (data) => {
         }
     })
 }
+
+module.exports.findOneAndUpdate = (data) => {
+    return new Promise((resolve, reject) => {
+        try {
+            //new->true, perquè retorni el doc modificat en comptes de l'original
+            //projection per dir si volem excloure algun camp.
+            data.model.findOneAndUpdate(data.findQuery, data.updateQuery, { projection: data.projection, new: true }).then(docs => {
+                //success
+                resolve({
+                    result: docs,
+                    status: constants.databaseStatus.ENTITY_UPDATED
+                })
+            }).catch(err => {
+                //error
+                reject({
+                    error: err.message,
+                    status: constants.databaseStatus.DATABASE_ERROR
+                })
+            })
+        }catch(err) {
+            console.log('ERROR-CrudRepository-findOneAndUpdate: ', err)
+        }
+    })
+}
+
+module.exports.findOneAndDelete = (data) => {
+    return new Promise((resolve, reject) => {
+        try {
+            //projection per dir si volem excloure algun camp.
+            data.model.findOneAndDelete(data.query, { projection: data.projection }).then(docs => {
+                //success
+                resolve({
+                    result: docs,
+                    status: constants.databaseStatus.ENTITY_DELETED
+                })
+            }).catch(err => {
+                //error
+                reject({
+                    error: err.message,
+                    status: constants.databaseStatus.DATABASE_ERROR
+                })
+            })
+        }catch(err) {
+            console.log('ERROR-CrudRepository-findOneAndDelete: ', err)
+        }
+    })
+}

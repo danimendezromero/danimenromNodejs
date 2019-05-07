@@ -49,8 +49,7 @@ module.exports.getCapitolsList = async (serviceData) => {
             query: {},
             model: Capitols,
             projection: {
-                '__v': false,
-                'password': false
+                '__v': false
             }
         };
         if(serviceData.skip && serviceData.limit) {
@@ -92,6 +91,67 @@ module.exports.getCapitolsDetails = async (serviceData) => {
         }
     }catch(err) {
         console.log('ERROR-Service-getCapitolsDetails: ', err);
+    }
+    return responseObj;
+}
+
+module.exports.updateCapitols = async (serviceData) => {
+    const responseObj = constants.responseObj;
+    try{
+        const data = {
+            findQuery: {
+                _id: mongoose.Types.ObjectId(serviceData.capitolsId)
+            },
+            model: Capitols,
+            projection: {
+                "__v": false
+            },
+            updateQuery: {}
+        };
+        if(serviceData.titol) data.updateQuery.titol = serviceData.titol;
+        if(serviceData.numero) data.updateQuery.numero = serviceData.numero;
+        if(serviceData.temporada) data.updateQuery.temporada = serviceData.temporada;
+
+        //Call db command
+        /*const responseFromDatabase = {
+            status: constants.databaseStatus.ENTITY_UPDATED,
+            result: 'okay'
+        };*/
+        const responseFromDatabase = await crudRepository.findOneAndUpdate(data);
+        if (responseFromDatabase.status === constants.databaseStatus.ENTITY_UPDATED) {
+            responseObj.body = responseFromDatabase.result;
+            responseObj.status = constants.serviceStatus.CAPITOLS_UPDATED_SUCCESSFULLY;
+        }
+    }catch(err) {
+        console.log('ERROR-Service-updateCapitols: ', err);
+    }
+    return responseObj;
+}
+
+module.exports.deleteCapitols = async (serviceData) => {
+    const responseObj = constants.responseObj;
+    try{
+        const data = {
+            query: {
+                _id: mongoose.Types.ObjectId(serviceData.capitolsId)
+            },
+            model: Capitols,
+            projection: {
+                "__v": false
+            }
+        };
+        //Call db command
+        /*const responseFromDatabase = {
+            status: constants.databaseStatus.ENTITY_DELETED,
+            result: 'okay'
+        };*/
+        const responseFromDatabase = await crudRepository.findOneAndDelete(data);
+        if (responseFromDatabase.status === constants.databaseStatus.ENTITY_DELETED) {
+            responseObj.body = responseFromDatabase.result;
+            responseObj.status = constants.serviceStatus.CAPITOLS_DELETED_SUCCESSFULLY;
+        }
+    }catch(err) {
+        console.log('ERROR-Service-deleteCapitols: ', err);
     }
     return responseObj;
 }

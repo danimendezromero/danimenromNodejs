@@ -10,11 +10,22 @@ module.exports = {
     }),
 
     getMediaListSchema: Joi.object().keys({
+        mediaTipus: Joi.string().required(),
         skip: Joi.number().optional(),
         limit: Joi.number().optional()
     }).and('skip', 'limit'),
 
-    getMediaDetailsSchema: Joi.object().keys({
+    //getMediaDetailsSchema: Joi.object().keys({
+      //  mediaId: Joi.objectId().required()
+    //})
+
+    mediaIdPathParamSchema: Joi.object().keys({
         mediaId: Joi.objectId().required()
+    }),
+
+    updateMediaBodySchema: Joi.object().keys({
+        titol: Joi.string().optional(),
+        sinopsis: Joi.string().optional(),
+        puntuacio: Joi.number().optional()
     })
 }

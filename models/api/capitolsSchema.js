@@ -14,7 +14,17 @@ module.exports = {
         limit: Joi.number().optional()
     }).and('skip', 'limit'),
 
-    getCapitolsDetailsSchema: Joi.object().keys({
+    //getCapitolsDetailsSchema: Joi.object().keys({
+      //  capitolsId: Joi.objectId().required()
+    //})
+
+    capitolsIdPathParamSchema: Joi.object().keys({
         capitolsId: Joi.objectId().required()
+    }),
+
+    updateCapitolsBodySchema: Joi.object().keys({
+        titol: Joi.string().optional(),
+        numero: Joi.number().optional(),
+        temporada: Joi.number().optional()
     })
 }

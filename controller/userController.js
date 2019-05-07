@@ -66,3 +66,50 @@ module.exports.getUserDetails = async (req, res, next) => {
     }
     return res.status(responseObj.status).send(responseObj);
 }
+
+module.exports.updateUser =  async (req, res, next) => {
+    const responseObj = constants.responseObj;
+    try {
+        const data = req.body;
+        data.userId = req.params.userId;
+        // call the service with this data
+        /*const responseFromService = {
+            status: constants.serviceStatus.USER_UPDATED_SUCCESSFULLY,
+            message: 'okay',
+            body: 'body'
+        };*/
+        const responseFromService = await userService.updateUser(data);
+        if (responseFromService.status === constants.serviceStatus.USER_UPDATED_SUCCESSFULLY) {
+            responseObj.status = 200;
+            responseObj.message = constants.serviceStatus.USER_UPDATED_SUCCESSFULLY;
+            responseObj.body = responseFromService.body;
+        }
+    } catch(err) {
+        console.log('ERROR-Controller-updateUser: ', err);
+    }
+    return res.status(responseObj.status).send(responseObj);
+}
+
+module.exports.deleteUser =  async (req, res, next) => {
+    const responseObj = constants.responseObj;
+    try {
+        const data = {
+            userId: req.params.userId
+        };
+        // call the service with this data
+        /*const responseFromService = {
+            status: constants.serviceStatus.USER_DELETED_SUCCESSFULLY,
+            message: 'okay',
+            body: 'body'
+        };*/
+        const responseFromService = await userService.deleteUser(data);
+        if (responseFromService.status === constants.serviceStatus.USER_DELETED_SUCCESSFULLY) {
+            responseObj.status = 204;
+            responseObj.message = constants.serviceStatus.USER_DELETED_SUCCESSFULLY;
+            responseObj.body = responseFromService.body;
+        }
+    } catch(err) {
+        console.log('ERROR-Controller-deleteUser: ', err);
+    }
+    return res.status(responseObj.status).send(responseObj);
+}

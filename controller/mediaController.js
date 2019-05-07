@@ -28,6 +28,7 @@ module.exports.getMediaList = async (req, res, next) => {
     const responseObj = constants.responseObj;
     try {
         const data = {
+            mediaTipus: req.params.mediaTipus,
             skip: req.query.skip,
             limit: req.query.limit
         };
@@ -63,6 +64,53 @@ module.exports.getMediaDetails = async (req, res, next) => {
         }
     } catch(err) {
         console.log('ERROR-Controller-getMediaDetails: ', err);
+    }
+    return res.status(responseObj.status).send(responseObj);
+}
+
+module.exports.updateMedia =  async (req, res, next) => {
+    const responseObj = constants.responseObj;
+    try {
+        const data = req.body;
+        data.mediaId = req.params.mediaId;
+        // call the service with this data
+        /*const responseFromService = {
+            status: constants.serviceStatus.MEDIA_UPDATED_SUCCESSFULLY,
+            message: 'okay',
+            body: 'body'
+        };*/
+        const responseFromService = await mediaService.updateMedia(data);
+        if (responseFromService.status === constants.serviceStatus.MEDIA_UPDATED_SUCCESSFULLY) {
+            responseObj.status = 200;
+            responseObj.message = constants.serviceStatus.MEDIA_UPDATED_SUCCESSFULLY;
+            responseObj.body = responseFromService.body;
+        }
+    } catch(err) {
+        console.log('ERROR-Controller-updateMedia: ', err);
+    }
+    return res.status(responseObj.status).send(responseObj);
+}
+
+module.exports.deleteMedia =  async (req, res, next) => {
+    const responseObj = constants.responseObj;
+    try {
+        const data = {
+            mediaId: req.params.mediaId
+        };
+        // call the service with this data
+        /*const responseFromService = {
+            status: constants.serviceStatus.MEDIA_DELETED_SUCCESSFULLY,
+            message: 'okay',
+            body: 'body'
+        };*/
+        const responseFromService = await mediaService.deleteMedia(data);
+        if (responseFromService.status === constants.serviceStatus.MEDIA_DELETED_SUCCESSFULLY) {
+            responseObj.status = 204;
+            responseObj.message = constants.serviceStatus.MEDIA_DELETED_SUCCESSFULLY;
+            responseObj.body = responseFromService.body;
+        }
+    } catch(err) {
+        console.log('ERROR-Controller-deleteMedia: ', err);
     }
     return res.status(responseObj.status).send(responseObj);
 }

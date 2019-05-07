@@ -8,6 +8,19 @@ const capitolsSchema = require('../models/api/capitolsSchema');
 router.post('/', joiSchemaValidation.validate(capitolsSchema.createCapitolsSchema, constants.requestObj.BODY), capitolsController.createCapitols);
 
 router.get('/list', joiSchemaValidation.validate(capitolsSchema.getCapitolsListSchema, constants.requestObj.QUERY_PARAMS), capitolsController.getCapitolsList);
-router.get('/details/:capitolsId', joiSchemaValidation.validate(capitolsSchema.getCapitolsDetailsSchema, constants.requestObj.PATH_PARAMS), capitolsController.getCapitolsDetails);
+router.get('/details/:capitolsId',
+    joiSchemaValidation.validate(capitolsSchema.capitolsIdPathParamSchema, constants.requestObj.PATH_PARAMS),
+    capitolsController.getCapitolsDetails
+);
+
+router.put('/:capitolsId',
+    joiSchemaValidation.validate(capitolsSchema.capitolsIdPathParamSchema, constants.requestObj.PATH_PARAMS),
+    joiSchemaValidation.validate(capitolsSchema.updateCapitolsBodySchema, constants.requestObj.BODY),
+    capitolsController.updateCapitols
+);
+router.delete('/:capitolsId',
+    joiSchemaValidation.validate(capitolsSchema.capitolsIdPathParamSchema, constants.requestObj.PATH_PARAMS),
+    capitolsController.deleteCapitols
+);
 
 module.exports = router;

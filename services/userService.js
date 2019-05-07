@@ -95,3 +95,64 @@ module.exports.getUserDetails = async (serviceData) => {
     }
     return responseObj;
 }
+
+module.exports.updateUser = async (serviceData) => {
+    const responseObj = constants.responseObj;
+    try{
+        const data = {
+            findQuery: {
+                _id: mongoose.Types.ObjectId(serviceData.userId)
+            },
+            model: User,
+            projection: {
+                "__v": false
+            },
+            updateQuery: {}
+        };
+        if(serviceData.password) data.updateQuery.password = serviceData.password;
+        if(serviceData.direccio) data.updateQuery.direccio = serviceData.direccio;
+        if(serviceData.nCompte) data.updateQuery.nCompte = serviceData.nCompte;
+
+        //Call db command
+        /*const responseFromDatabase = {
+            status: constants.databaseStatus.ENTITY_UPDATED,
+            result: 'okay'
+        };*/
+        const responseFromDatabase = await crudRepository.findOneAndUpdate(data);
+        if (responseFromDatabase.status === constants.databaseStatus.ENTITY_UPDATED) {
+            responseObj.body = responseFromDatabase.result;
+            responseObj.status = constants.serviceStatus.USER_UPDATED_SUCCESSFULLY;
+        }
+    }catch(err) {
+        console.log('ERROR-Service-updateUser: ', err);
+    }
+    return responseObj;
+}
+
+module.exports.deleteUser = async (serviceData) => {
+    const responseObj = constants.responseObj;
+    try{
+        const data = {
+            query: {
+                _id: mongoose.Types.ObjectId(serviceData.userId)
+            },
+            model: User,
+            projection: {
+                "__v": false
+            }
+        };
+        //Call db command
+        /*const responseFromDatabase = {
+            status: constants.databaseStatus.ENTITY_DELETED,
+            result: 'okay'
+        };*/
+        const responseFromDatabase = await crudRepository.findOneAndDelete(data);
+        if (responseFromDatabase.status === constants.databaseStatus.ENTITY_DELETED) {
+            responseObj.body = responseFromDatabase.result;
+            responseObj.status = constants.serviceStatus.USER_DELETED_SUCCESSFULLY;
+        }
+    }catch(err) {
+        console.log('ERROR-Service-deleteUser: ', err);
+    }
+    return responseObj;
+}
