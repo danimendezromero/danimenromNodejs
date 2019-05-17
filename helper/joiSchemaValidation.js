@@ -24,3 +24,24 @@ module.exports.validate = (schema, validation) => {
         }
     }
 }
+
+module.exports.validateAuthHeader = (schema) => {
+    // Ha de retornar una funció middleware, per tant té req, res, next.
+    return (req, res, next) => {
+        //console.log('req.header:',req.headers.authorization);
+        const objToValidate = { authorization: req.headers.authorization};
+        const result = Joi.validate(objToValidate, schema);
+        if(result.error) {
+            //const errorDetail = result.error.details;
+            const errorDetail = result.error.details.map((value) => {
+                return value.message;
+            });
+            responseObj.status = 403;
+            responseObj.message = constants.controllerStatus.TOKEN_MISSING;
+            responseObj.body = errorDetail;
+            return res.status(responseObj.status).send(responseObj);
+        } else {
+            next();
+        }
+    }
+}

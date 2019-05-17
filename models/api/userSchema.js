@@ -28,5 +28,14 @@ module.exports = {
         password: Joi.string().optional(),
         direccio: Joi.string().optional(),
         nCompte: Joi.number().optional()
+    }),
+
+    authenticateUserSchema: Joi.object().keys({
+        mail: Joi.string().email().required(),
+        password: Joi.string().required()
+    }),
+
+    tokenHeaderSchema: Joi.object().keys({
+        authorization: Joi.string().required()
     })
 }

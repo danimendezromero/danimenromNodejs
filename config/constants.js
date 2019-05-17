@@ -32,6 +32,8 @@ module.exports = {
         USER_FETCHED_SUCCESSFULLY: 'User Fetched Successfully',
         USER_UPDATED_SUCCESSFULLY: 'User updated successfully',
         USER_DELETED_SUCCESSFULLY: 'User deleted successfully',
+        USER_AUTHENTICATED_SUCCESSFULLY: 'User authenticated successfully',
+        INVALID_CREDENTIALS: 'name or password is incorrect'
     },
     requestObj: {
         BODY: 'body',
