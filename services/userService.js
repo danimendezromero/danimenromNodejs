@@ -2,15 +2,7 @@ const constants = require('../config/constants');
 const User = require('../models/db/userModel');
 const crudRepository = require('../database/crudRespository');
 const mongoose = require('mongoose');
-
-module.exports.createConnection = async () => {
-    try{
-        const responseFromDatabase = await crudRepository.createConnection();
-        console.log("responseObj", responseFromDatabase);
-    }catch(err) {
-        console.log('ERROR-Service-createConnection: ', err);
-    }
-};
+const jwt = require('jsonwebtoken');
 
 module.exports.createUser = async (serviceData) => {
     const responseObj = constants.responseObj;
@@ -109,8 +101,8 @@ module.exports.updateUser = async (serviceData) => {
             },
             updateQuery: {}
         };
+        if(serviceData.name) data.updateQuery.name = serviceData.name;
         if(serviceData.password) data.updateQuery.password = serviceData.password;
-        if(serviceData.direccio) data.updateQuery.direccio = serviceData.direccio;
         if(serviceData.nCompte) data.updateQuery.nCompte = serviceData.nCompte;
 
         //Call db command
@@ -153,6 +145,39 @@ module.exports.deleteUser = async (serviceData) => {
         }
     }catch(err) {
         console.log('ERROR-Service-deleteUser: ', err);
+    }
+    return responseObj;
+}
+
+module.exports.authenticateUser = async (serviceData) => {
+    const responseObj = constants.responseObj;
+    try {
+        const data = {
+            query: {
+                mail: serviceData.mail,
+                password: serviceData.password
+            },
+            model: User
+        };
+        const responseFromDatabase = await crudRepository.find(data);
+        if(responseFromDatabase.status === constants.databaseStatus.ENTITY_FETCHED && responseFromDatabase.result.length > 0) {
+            const token = jwt.sign(
+                {
+                    userId: responseFromDatabase.result[0]._id,
+                    userType: 'admin'
+                },
+                process.env.SECRET_KEY,
+                { expiresIn: '1h' }
+            );
+            responseObj.status = constants.serviceStatus.USER_AUTHENTICATED_SUCCESSFULLY;
+            responseObj.body = {
+                token: token
+            };
+        } else {
+            responseObj.status = constants.serviceStatus.INVALID_CREDENTIALS;
+        }
+    } catch(err) {
+        console.log('Something went wrong: Service: authenticate user:', err);
     }
     return responseObj;
 }
