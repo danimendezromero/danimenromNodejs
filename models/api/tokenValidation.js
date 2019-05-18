@@ -33,11 +33,39 @@ module.exports.validateToken = () => {
     }
 }
 
-module.exports.checkUser = () => {
+module.exports.checkUserAdmin = () => {
   return (req, res, next) => {
       const responseObj = constants.responseObj;
       const decoded = jwt.decode(req.myToken, {complete:true});
       console.log(decoded.payload.userId)
-      next();
+      if (decoded.payload.tipus=="admin") {
+        next();
+      }else {
+          responseObj.status="403";
+          responseObj.message="Acceso denegado";
+          return res.status(responseObj.status).send(responseObj);
+      }
+
+  }
+};
+
+module.exports.checkUserId = () => {
+  return (req, res, next) => {
+      const responseObj = constants.responseObj;
+      const decoded = jwt.decode(req.myToken, {complete:true});
+      console.log(decoded.payload.userId)
+
+      if (decoded.payload.userId==req.params.userId) {
+        next();
+      }else {
+        responseObj.status="403";
+        responseObj.message="Acceso denegado";
+          return res.status(responseObj.status).send(responseObj);
+      }
+      if (decoded.payload.tipus=="admin") {
+        next();
+      }
+
+
   }
 };
