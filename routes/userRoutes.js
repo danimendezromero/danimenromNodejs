@@ -14,14 +14,14 @@ router.post('/',
 router.get('/list',
     joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
     tokenValidation.validateToken(),
-    tokenValidation.checkUser(),
+    tokenValidation.checkUserAdmin(),
     joiSchemaValidation.validate(userSchema.getUserListSchema, constants.requestObj.QUERY_PARAMS),
     userController.getUserList
 );
 router.get('/details/:userId',
     joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
     tokenValidation.validateToken(),
-    tokenValidation.checkUser(),
+    tokenValidation.checkUserId(),
     joiSchemaValidation.validate(userSchema.userIdPathParamSchema, constants.requestObj.PATH_PARAMS),
     userController.getUserDetails
 );
@@ -29,7 +29,7 @@ router.get('/details/:userId',
 router.put('/:userId',
     joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
     tokenValidation.validateToken(),
-    tokenValidation.checkUser(),
+    tokenValidation.checkUserId(),
     joiSchemaValidation.validate(userSchema.userIdPathParamSchema, constants.requestObj.PATH_PARAMS),
     joiSchemaValidation.validate(userSchema.updateUserBodySchema, constants.requestObj.BODY),
     userController.updateUser
@@ -37,7 +37,7 @@ router.put('/:userId',
 router.delete('/:userId',
     joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
     tokenValidation.validateToken(),
-    tokenValidation.checkUser(),
+    tokenValidation.checkUserId(),
     joiSchemaValidation.validate(userSchema.userIdPathParamSchema, constants.requestObj.PATH_PARAMS),
     userController.deleteUser
 );

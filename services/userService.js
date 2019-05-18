@@ -164,7 +164,7 @@ module.exports.authenticateUser = async (serviceData) => {
             const token = jwt.sign(
                 {
                     userId: responseFromDatabase.result[0]._id,
-                    userType: 'admin'
+                    userType: responseFromDatabase.result[0].userType
                 },
                 process.env.SECRET_KEY,
                 { expiresIn: '1h' }
