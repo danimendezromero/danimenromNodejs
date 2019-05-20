@@ -7,11 +7,11 @@ const mediaSchema = require('../models/api/mediaSchema');
 const tokenValidation = require('../models/api/tokenValidation');
 
 router.post('/',
-joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
-tokenValidation.validateToken(),
-tokenValidation.checkUserAdmin(),
-joiSchemaValidation.validate(mediaSchema.createMediaSchema, constants.requestObj.BODY),
-mediaController.createMedia);
+  joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),
+  tokenValidation.validateToken(),
+  tokenValidation.checkUserAdmin(),
+  joiSchemaValidation.validate(mediaSchema.createMediaSchema, constants.requestObj.BODY),
+  mediaController.createMedia);
 
 router.get('/list/:mediaTipus',
   joiSchemaValidation.validateAuthHeader(userSchema.tokenHeaderSchema),

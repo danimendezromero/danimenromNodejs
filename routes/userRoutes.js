@@ -6,6 +6,8 @@ const joiSchemaValidation = require('../helper/joiSchemaValidation');
 const userSchema = require('../models/api/userSchema');
 const tokenValidation = require('../models/api/tokenValidation');
 
+//tokenValidation.checkUserId() esto comprueba que la id es la misma que la que buscar para saber si es el mismo usuario, o en caso de que seas admin te pasa
+//tokenValidation.checkUserAdmin() En caso de que seas admin te pasa
 
 router.post('/',
     joiSchemaValidation.validate(userSchema.createUserSchema, constants.requestObj.BODY), userController.createUser
